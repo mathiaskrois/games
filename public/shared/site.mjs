@@ -23,6 +23,9 @@ export function setLanguage(value) {
 }
 export function syncLanguage() {
   document.documentElement.lang = language;
+  const theme = $("theme-toggle");
+  theme.setAttribute("aria-label", tr("Dark mode", "Mørk tilstand"));
+  theme.title = tr("Dark mode", "Mørk tilstand");
   document.querySelectorAll("[data-lang]").forEach(button =>
     button.setAttribute("aria-pressed", String(button.dataset.lang === language)));
   const all = $("all-games");

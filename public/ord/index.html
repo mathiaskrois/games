@@ -1,22 +1,22 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f8f7f3">
+  <meta name="theme-color" content="#0c1014">
   <meta name="robots" content="noindex, nofollow">
   <meta name="description" content="Five letters. Six chances. Your own little word ritual, in Danish or English.">
-  <title>Ord · A little word ritual</title>
+  <script src="/games/shared/theme.js"></script><title>Ord · A little word ritual</title>
   <link rel="icon" href="icon.svg" type="image/svg+xml">
   <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="style.css">
   <link rel="stylesheet" href="../shared/style.css">
-</head>
+<link rel="stylesheet" href="/games/shared/arcade.css"></head>
 <body data-game="ord">
   <header class="site-header"><div class="header-inner">
     <a class="wordmark" href="../"><i aria-hidden="true">✦</i> KROIS<span>GAMES</span></a>
-    <div class="header-actions"><div class="language" role="group" aria-label="Language"><button data-lang="en" aria-label="English">EN</button><button data-lang="da" aria-label="Dansk">DA</button></div><button id="help" class="icon-button" aria-label="How to play">?</button><button id="stats" class="icon-button" aria-label="Statistics">▥</button></div>
+    <div class="header-actions"><button type="button" id="theme-toggle" role="switch" aria-label="Dark mode" aria-checked="true" class="theme-toggle"></button><div class="language" role="group" aria-label="Language"><button data-lang="en" aria-label="English">EN</button><button data-lang="da" aria-label="Dansk">DA</button></div><button id="help" class="icon-button" aria-label="How to play">?</button><button id="stats" class="icon-button" aria-label="Statistics">▥</button></div>
   </div></header>
   <div class="app">
     <a id="all-games" class="back-link" href="../">← All games</a>
