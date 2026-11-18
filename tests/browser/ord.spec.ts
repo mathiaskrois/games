@@ -11,7 +11,7 @@ test.beforeEach(async ({ page }) => {
 test("English guesses, validation, reload, celebration, replay and stats", async ({ page }) => {
   const errors: string[] = [];
   page.on("pageerror", e => errors.push(e.message));
-  await page.goto("/ord/");
+  await page.goto("/games/ord/");
   await expect(page.getByRole("button", { name: "A", exact: true })).toBeEnabled();
   await page.keyboard.type("zzzzz");
   await page.keyboard.press("Enter");
@@ -45,7 +45,7 @@ test("English guesses, validation, reload, celebration, replay and stats", async
 });
 
 test("Danish touch keyboard and independent language progress", async ({ page }) => {
-  await page.goto("/ord/");
+  await page.goto("/games/ord/");
   await expect(page.getByRole("button", { name: "A", exact: true })).toBeEnabled();
   await page.keyboard.type("app");
   await page.getByRole("button", { name: "Dansk", exact: true }).click();
@@ -55,7 +55,7 @@ test("Danish touch keyboard and independent language progress", async ({ page })
   for (const letter of "ÆBLER") await page.getByRole("button", { name: letter, exact: true }).click();
   await page.getByRole("button", { name: "Enter", exact: true }).click();
   await expect(page.getByRole("heading", { name: "Smukt klaret." })).toBeVisible();
-  await page.getByRole("button", { name: "Close dialog" }).click();
+  await page.getByRole("button", { name: "Luk dialog" }).click();
   await page.getByRole("button", { name: "English", exact: true }).click();
   await expect(page.locator(".tile.filled")).toHaveCount(3);
   await expect(page.locator(".tile.correct")).toHaveCount(0);
@@ -63,7 +63,7 @@ test("Danish touch keyboard and independent language progress", async ({ page })
 });
 
 test("six failed guesses reveal the answer and allow replay", async ({ page }) => {
-  await page.goto("/ord/");
+  await page.goto("/games/ord/");
   for (const word of ["CRANE", "GHOST", "MUSIC", "LIGHT", "WATER", "STONE"]) {
     await expect(page.getByRole("button", { name: "A", exact: true })).toBeEnabled();
     await page.keyboard.type(word);
@@ -77,7 +77,7 @@ test("six failed guesses reveal the answer and allow replay", async ({ page }) =
 
 test("help, reduced motion and reload do not double-count a win", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await page.goto("/ord/");
+  await page.goto("/games/ord/");
   await page.getByRole("button", { name: "How to play", exact: true }).click();
   await expect(page.getByRole("dialog")).toContainText("Repeated letters");
   await page.getByRole("button", { name: "Let’s play" }).click();
@@ -93,12 +93,12 @@ test("help, reduced motion and reload do not double-count a win", async ({ page 
 
 test("the game and both dictionaries work after an offline reload", async ({ page, context, browserName }) => {
   test.skip(browserName === "webkit", "WebKit offline emulation blocks service-worker navigation.");
-  await page.goto("/ord/");
+  await page.goto("/games/ord/");
   await expect(page.getByRole("button", { name: "A", exact: true })).toBeEnabled();
   await page.evaluate(async () => {
     await navigator.serviceWorker.ready;
     if (!navigator.serviceWorker.controller) await new Promise<void>(resolve => navigator.serviceWorker.addEventListener("controllerchange", () => resolve(), { once: true }));
-    if (navigator.serviceWorker.controller?.scriptURL !== new URL("/ord/sw.js", location.origin).href) throw new Error("Wrong service-worker scope");
+    if (navigator.serviceWorker.controller?.scriptURL !== new URL("/games/sw.js", location.origin).href) throw new Error("Wrong service-worker scope");
   });
   await context.setOffline(true);
   await page.reload();
@@ -111,7 +111,7 @@ test("the game and both dictionaries work after an offline reload", async ({ pag
 test("the complete keyboard fits short and tall phones", async ({ page, browserName }) => {
   for (const [width, height] of [[320, 568], [375, 667], [390, 844]]) {
     await page.setViewportSize({ width, height });
-    await page.goto("/ord/");
+    await page.goto("/games/ord/");
     await expect(page.getByRole("button", { name: "A", exact: true })).toBeEnabled();
     const keyboard = await page.locator("#keyboard").boundingBox();
     expect(keyboard!.y + keyboard!.height).toBeLessThanOrEqual(height);

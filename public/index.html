@@ -1,38 +1,27 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-  <meta name="theme-color" content="#f8f7f3">
-  <meta name="robots" content="noindex, nofollow">
-  <meta name="description" content="Five letters. Six chances. Your own little word ritual, in Danish or English.">
-  <title>Ord · A little word ritual</title>
-  <link rel="icon" href="icon.svg" type="image/svg+xml">
-  <link rel="apple-touch-icon" href="apple-touch-icon.png">
-  <link rel="manifest" href="manifest.webmanifest">
-  <link rel="stylesheet" href="style.css">
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#f6f2e9">
+  <title>Krois Games</title>
+  <link rel="icon" href="ord/icon.svg">
+  <link rel="stylesheet" href="shared/style.css">
 </head>
 <body>
-  <div class="app">
-    <header class="masthead">
-      <a class="brand" href="./" aria-label="Ord home">krois<span> / games</span></a>
-      <div class="tools"><button id="stats" class="icon-button" aria-label="Statistics"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 20V12h4v8m2 0V4h4v16m2 0V8h4v12"/></svg></button><button id="help" class="icon-button" aria-label="How to play">?</button></div>
-    </header>
-    <main>
-      <div class="edition"><span id="date"></span><span id="edition-label">THE WORD EDITION</span></div>
-      <section class="intro" aria-labelledby="title"><p class="eyebrow" id="eyebrow">A LITTLE WORD RITUAL</p><h1 id="title">Ord<span>.</span></h1><p id="subtitle">Five letters. Six chances. A fresh start anytime.</p></section>
-      <div class="language" role="group" aria-label="Game language"><button data-lang="en" aria-pressed="true">English</button><button data-lang="da" aria-pressed="false">Dansk</button></div>
-      <div class="game-meta"><span id="mode-label">UNLIMITED PLAY</span><span id="attempt-label">GUESS 1 OF 6</span></div>
-      <div id="board" class="board" role="group" aria-label="Word board" tabindex="-1"></div>
-      <p id="message" class="message" role="status" aria-live="polite"></p>
-      <div id="keyboard" class="keyboard" role="group" aria-label="Keyboard"></div>
-      <button id="result" class="result-link" hidden>View result →</button>
-      <div class="legend" aria-label="Tile meanings"><span><i class="correct"></i><span id="legend-correct">Right spot</span></span><span><i class="present"></i><span id="legend-present">Wrong spot</span></span><span><i class="absent"></i><span id="legend-absent">Not in word</span></span></div>
-    </main>
-    <footer><span id="footer-note">A small pause. A good word.</span><span>MADE FOR MK · KROIS</span></footer>
-  </div>
-  <dialog id="dialog" aria-labelledby="dialog-title"><button id="close" class="close" aria-label="Close dialog">×</button><div id="dialog-content"></div></dialog>
-  <div id="confetti" class="confetti" aria-hidden="true"></div>
-  <script type="module" src="game.mjs"></script>
+  <header class="site-header"><div class="header-inner">
+    <a class="wordmark" href="./"><i aria-hidden="true">✦</i> KROIS<span>GAMES</span></a>
+    <div class="header-actions"><div class="language" role="group"><button data-lang="en">EN</button><button data-lang="da">DA</button></div></div>
+  </div></header>
+  <main class="hub">
+    <section class="hero">
+      <div><h1 id="hub-title">Play a<br><em>little.</em></h1><p id="hub-intro">Wordplay, number puzzles, and a round of Snake. Pick a game and play at your own pace.</p></div>
+      <div class="hero-art" aria-hidden="true"><div class="orbit"></div><span class="print-tile print-o">O</span><span class="print-tile print-eight">8</span><span class="print-tile print-snake">⌁</span><span class="print-spark">✦</span><span class="print-star">✦</span></div>
+    </section>
+    <section aria-labelledby="pick"><div class="section-rule"><h2 id="pick">Pick a game</h2></div><div id="catalog" class="catalog"></div></section>
+  </main>
+  <footer class="site-footer"><span>KROIS GAMES</span><span id="local-note">Progress stays on this device</span></footer>
+  <script type="module" src="shared/hub.mjs"></script>
 </body>
 </html>

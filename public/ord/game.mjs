@@ -1,3 +1,4 @@
+import { language, setLanguage, syncLanguage, offline, celebrate } from "../shared/site.mjs";
 import { answers, scoreGuess, chooseAnswer } from "./engine.mjs";
 
 const $ = id => document.getElementById(id);
@@ -8,7 +9,7 @@ const copy = {
 };
 let saved;
 try { saved = JSON.parse(localStorage.getItem(storageKey) || "null"); } catch { /* Storage is optional. */ }
-let lang = saved?.lang === "da" ? "da" : "en";
+let lang = language;
 let data = { en: {}, da: {} };
 // Restore only structurally valid records; corrupt browser storage starts fresh.
 for (const language of ["en", "da"]) {
@@ -19,7 +20,7 @@ for (const language of ["en", "da"]) {
     data[language] = { answer: record.answer, guesses: record.guesses, entry: typeof record.entry === "string" && /^[A-ZÆØÅ]{0,5}$/.test(record.entry) ? record.entry : "" };
   }
   const stats = record.stats;
-  if (stats && [stats.played, stats.won, stats.streak, stats.best, ...(stats.distribution || [])].every(n => Number.isSafeInteger(n) && n >= 0) && stats.distribution?.length === 6) data[language].stats = stats;
+  if (Array.isArray(stats?.distribution) && [stats.played, stats.won, stats.streak, stats.best, ...(stats.distribution || [])].every(n => Number.isSafeInteger(n) && n >= 0) && stats.distribution?.length === 6) data[language].stats = stats;
 }
 let dictionaries = {}, pools = {}, busy = false, loading = false, generation = 0;
 const t = () => copy[lang];
@@ -35,11 +36,11 @@ function newGame() {
   persist(); render();
 }
 function localize() {
-  document.documentElement.lang = lang;
+  syncLanguage();
   document.title = `Ord · ${lang === "da" ? "Et lille ordritual" : "A little word ritual"}`;
-  for (const [id, key] of Object.entries({ subtitle: "subtitle", eyebrow: "eyebrow", "edition-label": "edition", "mode-label": "mode", "legend-correct": "correct", "legend-present": "present", "legend-absent": "absent", "footer-note": "footer", result: "result" })) $(id).textContent = t()[key];
+  for (const [id, key] of Object.entries({ subtitle: "subtitle", eyebrow: "eyebrow", "mode-label": "mode", "legend-correct": "correct", "legend-present": "present", "legend-absent": "absent", result: "result" })) $(id).textContent = t()[key];
+  $("close").setAttribute("aria-label", lang === "da" ? "Luk dialog" : "Close dialog");
   $("help").setAttribute("aria-label", t().help); $("stats").setAttribute("aria-label", t().stats);
-  $("date").textContent = new Intl.DateTimeFormat(lang === "da" ? "da-DK" : "en-GB", { day: "numeric", month: "long", year: "numeric" }).format(new Date());
   document.querySelectorAll("[data-lang]").forEach(button => { button.setAttribute("aria-pressed", String(button.dataset.lang === lang)); button.disabled = busy; });
 }
 function render() {
@@ -83,6 +84,7 @@ function render() {
 }
 async function loadLanguage(language) {
   if (busy) return;
+  setLanguage(language);
   lang = language; const token = ++generation;
   loading = true; render(); persist();
   try {
@@ -154,16 +156,6 @@ function showResult() {
     catch { $("share").textContent = t().shareFail; }
   };
 }
-function celebrate() {
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-  $("confetti").replaceChildren();
-  for (let i = 0; i < 65; i++) {
-    const bit = document.createElement("i");
-    bit.style.cssText = `--x:${Math.random() * 100}%;--delay:${Math.random() * .6}s;--drift:${Math.random() * 200 - 100}px;background:${["#537756", "#ad873c", "#d4be78", "#a4b59b"][i % 4]};transform:rotate(${Math.random() * 180}deg)`;
-    $("confetti").append(bit);
-  }
-  setTimeout(() => $("confetti").replaceChildren(), 4000);
-}
 $("help").onclick = () => {
   showDialog(`<p class="eyebrow">FIVE LETTERS. / FEM BOGSTAVER.</p><h2 id="dialog-title">${t().help}</h2><p>${t().instructions}</p><div class="example" aria-hidden="true"><div class="tile correct">O</div><div class="tile present">R</div><div class="tile absent">D</div><div class="tile">E</div><div class="tile">T</div></div><div class="help-copy">${t().explanations}</div><button class="primary" id="ready">${t().ready}</button><p style="font-size:10px">${t().privacy}</p>`);
   $("ready").onclick = () => $("dialog").close();
@@ -188,5 +180,5 @@ document.addEventListener("keydown", event => {
     input(event.key);
   }
 });
-if ("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js", { scope: "./" }).catch(() => {});
+offline();
 loadLanguage(lang);

@@ -1,6 +1,6 @@
-// This worker owns /ord/ only; it never reads or clears another app's caches.
-const CACHE = "krois-ord-__BUILD__";
-const BASE = "/ord/";
+// Match offline navigations to their specific game.
+const CACHE = "krois-games-shell-__BUILD__";
+const BASE = "/games/";
 const ASSETS = "__ASSETS__";
 self.addEventListener("install", event => {
   event.waitUntil((async () => {
@@ -12,7 +12,8 @@ self.addEventListener("install", event => {
 });
 self.addEventListener("activate", event => {
   event.waitUntil((async () => {
-    for (const key of await caches.keys()) if (key.startsWith("krois-ord-") && key !== CACHE) await caches.delete(key);
+    if (!Array.isArray(ASSETS)) return;
+    for (const key of await caches.keys()) if (key.startsWith("krois-games-shell-") && key !== CACHE) await caches.delete(key);
     await self.clients.claim();
   })());
 });
@@ -23,7 +24,10 @@ self.addEventListener("fetch", event => {
     const cache = await caches.open(CACHE);
     if (event.request.mode === "navigate") {
       try { return await fetch(event.request); }
-      catch { return await cache.match(BASE + "index.html") || Response.error(); }
+      catch {
+        const index = url.pathname.endsWith(".html") ? url.pathname : url.pathname.replace(/\/?$/, "/") + "index.html";
+        return await cache.match(index) || new Response("Page unavailable offline", { status: 404 });
+      }
     }
     return await cache.match(event.request) || fetch(event.request);
   })());
