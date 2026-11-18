@@ -1,0 +1,11 @@
+{
+  "edition": "Retskrivningsordbogen 5.1",
+  "publisher": "Dansk Sprognævn",
+  "source": "https://ordregister.dk/files/cor1.5.1.0.tsv",
+  "sourceSha256": "1c4d1c06bd676e66be8e8c0af68615c8a892472a05af3b261ba8a9d1f2d2b82b",
+  "intermediateDictionarySha256": "f0cfc4fe8d457c83da5503804145b24fbe34b7cdd6fb669aa5b2bfae0905c714",
+  "filter": "Exact normalized forms marked N in COR1 1.5.1.0, NFC uppercase A-ZÆØÅ, exactly five letters. No inferred forms.",
+  "count": 6475,
+  "sha256": "26ef2159d55b797883f293d612773ad9260e60311171000b834d6db35fe6c3ac",
+  "terms": "Dansk Sprognævn makes COR available for all purposes. https://dsn.dk/forskning/sprogteknologi-og-fagsprog/cor/"
+}

@@ -1,0 +1,16 @@
+{
+  "name": "ord",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "dev": "node scripts/preview.mjs public",
+    "preview": "node scripts/preview.mjs dist",
+    "test": "node --test tests/unit/*.test.mjs",
+    "test:browser": "playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "1.63.0"
+  }
+}
